@@ -6,88 +6,108 @@
 <title>Revisión de enunciados</title>
 <style>
 :root {
-  --bg: #fbfbfa; --ink: #22262c; --muted: #8a919c; --faint: #c3c8cf; --line: #e7e9ec;
-  --accent: #2f5fd0; --pend: #d08a12; --ok: #2e8b57; --disc: #a0a6ae; --new: #e0457b;
+  --bg: #f1f2f4; --card: #fff; --ink: #22262c; --muted: #7d8590; --faint: #b9bec6; --line: #e8eaed;
+  --prof: #22262c; --coord: #2459c7; --coord-soft: #eef3fd;
+  --pend: #c98208; --ok: #23854f; --ok-soft: #e5f4ea; --disc: #9aa0a8; --new: #d63b72; --new-soft: #fde8ef;
+  --shadow: 0 1px 3px rgba(20, 30, 50, .08), 0 1px 2px rgba(20, 30, 50, .04);
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #17191d; --ink: #e4e7eb; --muted: #8d95a1; --faint: #4a515b; --line: #2b3038;
-    --accent: #86a6ff; --pend: #f0b04a; --ok: #6fcf97; --disc: #6e7580; --new: #ff7aa6; }
+  :root {
+    --bg: #121418; --card: #1c1f25; --ink: #e4e7eb; --muted: #8d95a1; --faint: #4a515b; --line: #2b3038;
+    --prof: #e4e7eb; --coord: #86a6ff; --coord-soft: #1f2a42;
+    --pend: #f0b04a; --ok: #6fcf97; --ok-soft: #1b3326; --disc: #6e7580; --new: #ff7aa6; --new-soft: #3a1f2a;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .4);
+  }
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink);
   font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
 button, select, input, textarea { font: inherit; color: inherit; }
-.layout { max-width: 1060px; margin: 0 auto; padding: 0 16px 120px; display: flex; gap: 40px; }
-nav { width: 190px; flex: none; position: sticky; top: 0; align-self: flex-start;
-  padding-top: 28px; font-size: 13px; max-height: 100vh; overflow: auto; }
-nav a { display: block; color: var(--muted); text-decoration: none; padding: 1px 0; }
+.layout { max-width: 1080px; margin: 0 auto; padding: 0 16px 120px; display: flex; gap: 32px; }
+nav { width: 200px; flex: none; position: sticky; top: 0; align-self: flex-start;
+  padding-top: 76px; font-size: 13px; max-height: 100vh; overflow: auto; }
+nav a { display: flex; justify-content: space-between; gap: 6px; color: var(--muted); text-decoration: none; padding: 1px 0; }
 nav a:hover { color: var(--ink); }
 nav a.prob { color: var(--ink); font-weight: 600; margin-top: 10px; }
-nav a.part { padding-left: 12px; }
+nav a.sub { padding-left: 12px; }
 nav .cnt { color: var(--pend); }
-main { flex: 1; min-width: 0; max-width: 720px; }
+nav .done { color: var(--ok); }
+main { flex: 1; min-width: 0; max-width: 740px; }
 @media (max-width: 900px) { nav { display: none; } }
 
-.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
-  gap: 4px 16px; padding: 24px 0 4px; }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: 4px 16px; padding: 22px 0 14px; }
 .top h1 { font-size: 20px; margin: 0; }
-.who { font-size: 13px; color: var(--muted); }
-.who select { border: none; background: none; color: var(--ink); font-size: 13px; padding: 0; }
-.note { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-.note button { border: none; background: none; color: var(--muted); text-decoration: underline;
-  padding: 0; cursor: pointer; font-size: 12px; }
-.legend { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.top .est { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 10px; }
+.user select { border: 1px solid var(--line); border-radius: 999px; background: var(--card);
+  padding: 3px 10px; font-size: 13px; }
 
-h2 { font-size: 18px; margin: 36px 0 2px; padding-bottom: 4px; border-bottom: 2px solid var(--ink);
-  display: flex; justify-content: space-between; align-items: baseline; gap: 12px; scroll-margin-top: 12px; }
-h2 .cnt { font-size: 13px; font-weight: 400; color: var(--pend); }
-h2 .cnt.done { color: var(--ok); }
-.ph { margin-top: 14px; }
-h3 { font-size: 15px; margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
-  padding: 3px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 12px; }
-h3 .rev { font-size: 12px; font-weight: 400; color: var(--muted); }
-h3 .rev .y { color: var(--ok); }
-h3 .myok { font-size: 12px; font-weight: 400; }
+section.prob { background: var(--card); border-radius: 12px; box-shadow: var(--shadow);
+  padding: 4px 20px 14px; margin-bottom: 18px; scroll-margin-top: 12px; }
+h2 { font-size: 18px; margin: 12px 0 0; display: flex; flex-wrap: wrap; justify-content: space-between;
+  align-items: baseline; gap: 2px 12px; }
+h2 .meta { font-size: 13px; font-weight: 400; color: var(--muted); }
+.cnt { color: var(--pend); }
+.alldone { color: var(--ok); font-weight: 600; }
 
-.c { position: relative; padding: 5px 0 5px 22px; }
-.c .st { position: absolute; left: 0; top: 5px; width: 16px; text-align: center; font-weight: 700; }
+.part { margin-top: 18px; scroll-margin-top: 12px; }
+h3 { font-size: 15px; margin: 0; padding-bottom: 4px; border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
+.okall { font-size: 12px; font-weight: 600; color: var(--ok); background: var(--ok-soft);
+  border-radius: 999px; padding: 1px 9px; }
+
+.rev { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-size: 13px;
+  color: var(--muted); padding: 7px 0 4px; }
+.rev .avg b { color: var(--ink); font-weight: 600; }
+.rev .okers { color: var(--ok); }
+.mine { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13px;
+  background: var(--bg); border-radius: 8px; padding: 6px 10px; margin: 2px 0 6px; }
+.mine .lbl { font-weight: 600; color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); }
+.seg button { border: none; background: none; padding: 1px 8px; cursor: pointer; color: var(--muted); }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on { background: var(--coord); color: #fff; }
+.mine input { width: 52px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); padding: 1px 6px; }
+.okbtn { border: 1px solid var(--line); background: var(--card); border-radius: 6px; padding: 1px 12px;
+  cursor: pointer; color: var(--muted); }
+.okbtn.on { background: var(--ok); border-color: var(--ok); color: #fff; font-weight: 600; }
+
+.c { position: relative; padding: 9px 0 9px 24px; border-bottom: 1px solid var(--line); }
+.c .st { position: absolute; left: 2px; top: 9px; width: 16px; text-align: center; font-weight: 700; }
 .st.Pendiente { color: var(--pend); }
 .st.Resuelto { color: var(--ok); }
 .st.Descartado { color: var(--disc); }
 .c.closed > .body { color: var(--muted); }
-.c .body { white-space: pre-wrap; overflow-wrap: anywhere; }
-.c .body b { color: var(--ink); }
+.body { white-space: pre-wrap; overflow-wrap: anywhere; }
 .c.clamp > .body { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-.dot { position: absolute; left: -10px; top: 13px; width: 6px; height: 6px; border-radius: 50%; background: var(--new); }
-.plus1 { font-size: 13px; color: var(--accent); white-space: nowrap; margin-left: 6px; }
-.r { font-size: 14px; color: var(--muted); margin: 2px 0 0; padding-left: 12px; border-left: 2px solid var(--line);
-  white-space: pre-wrap; overflow-wrap: anywhere; position: relative; }
-.r b { color: var(--ink); font-weight: 600; }
-.r .ev { font-style: italic; }
-.r .dot { left: -14px; top: 8px; }
-.acts { font-size: 12px; position: absolute; right: 0; top: -6px; background: var(--bg);
-  border: 1px solid var(--line); border-radius: 6px; padding: 1px 2px 1px 8px; display: none; }
+.n.prof { font-weight: 700; color: var(--prof); }
+.n.coord { font-weight: 700; color: var(--coord); }
+.n.coord::before { content: "◆ "; font-size: 11px; }
+.new { display: inline-block; font-size: 11px; font-weight: 700; color: var(--new); background: var(--new-soft);
+  border-radius: 999px; padding: 0 7px; margin-right: 6px; vertical-align: 1px; }
+.r { font-size: 14px; margin: 6px 0 0; padding: 4px 10px; border-left: 3px solid var(--line);
+  white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); }
+.r.coord { background: var(--coord-soft); border-left-color: var(--coord); border-radius: 0 6px 6px 0; }
+.c.closed .r { color: var(--muted); }
+.r .ev { font-style: italic; color: var(--muted); }
+.acts { font-size: 12px; position: absolute; right: 0; top: 4px; background: var(--card);
+  border: 1px solid var(--line); border-radius: 6px; padding: 1px 2px 1px 8px; display: none; box-shadow: var(--shadow); }
 .c:hover > .acts, .c:focus-within > .acts { display: block; }
-@media (hover: none) { .acts { display: block; position: static; border: none; padding: 0; background: none; } }
+@media (hover: none) { .acts { display: block; position: static; border: none; padding: 4px 0 0; background: none; box-shadow: none; } }
 .acts button, .lk { border: none; background: none; padding: 0 8px 0 0; color: var(--muted); cursor: pointer; font-size: 12px; }
-.acts button:hover, .lk:hover { color: var(--accent); }
-.acts button.on { color: var(--accent); font-weight: 600; }
-.more { border: none; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 13px; }
-.add { padding: 4px 0 2px 22px; }
+.acts button:hover, .lk:hover { color: var(--coord); }
+.more { border: none; background: none; padding: 0; color: var(--coord); cursor: pointer; font-size: 13px; }
+.add { padding: 6px 0 0 24px; }
 .add .lk { color: var(--faint); font-size: 13px; }
-.add .lk:hover { color: var(--accent); }
-
-.box { margin: 6px 0 4px; }
+.add .lk:hover { color: var(--coord); }
+.box { margin: 6px 0 2px; }
 .box textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 6px;
-  padding: 6px 8px; background: var(--bg); resize: vertical; }
-.box textarea:focus { outline: none; border-color: var(--accent); }
+  padding: 6px 8px; background: var(--card); resize: vertical; }
+.box textarea:focus { outline: none; border-color: var(--coord); }
 .box .row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; align-items: center; font-size: 13px; }
-.btn { border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 2px 10px; cursor: pointer; font-size: 13px; }
-.btn.pri { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn { border: 1px solid var(--line); background: var(--card); border-radius: 6px; padding: 2px 10px; cursor: pointer; font-size: 13px; }
+.btn.pri { background: var(--coord); border-color: var(--coord); color: #fff; }
 .hint { font-size: 12px; color: var(--muted); }
-.okform { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; font-weight: 400; }
-.okform input[type=number] { width: 56px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); padding: 0 4px; }
-.okform select { border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
 </style>
 </head>
 <body>
@@ -95,18 +115,16 @@ h3 .myok { font-size: 12px; font-weight: 400; }
   <nav id="nav"></nav>
   <main>
     <div class="top">
-      <h1 id="title"></h1>
-      <div class="who">Soy <select id="me"></select></div>
+      <h1><span id="title"></span><span class="est" id="est"></span></h1>
+      <div class="user"><select id="me" aria-label="Usuario"></select></div>
     </div>
-    <div class="note" id="note"></div>
-    <div class="legend"><span class="st Pendiente">○</span> pendiente &nbsp; <span class="st Resuelto">✓</span> resuelto &nbsp; <span class="st Descartado">–</span> descartado &nbsp; <span style="color:var(--new)">●</span> nuevo para ti</div>
     <div id="doc"></div>
   </main>
 </div>
 
 <script>
 "use strict";
-const DATA = {"key": "demo", "title": "Revisión I2 (demo)", "note": "Demo con datos inventados. Lo que hagas se guarda solo en tu navegador", "people": [{"id": "ana", "name": "Ana Rojas", "role": "prof"}, {"id": "bruno", "name": "Bruno Díaz", "role": "prof"}, {"id": "carla", "name": "Carla Soto", "role": "prof"}, {"id": "diego", "name": "Diego Paredes", "role": "prof"}, {"id": "elena", "name": "Elena Vidal", "role": "coord"}, {"id": "felipe", "name": "Felipe Mora", "role": "coord"}], "me": "ana", "seenH": {"ana": 24}, "problems": [{"id": 1, "title": "Tren de carga", "parts": ["A", "B", "C"]}, {"id": 2, "title": "Números felices", "parts": ["A", "B", "C"]}, {"id": 3, "title": "Biblioteca", "parts": ["A", "B", "C"]}], "comments": [{"p": 0, "part": "", "by": "carla", "h": 50, "text": "¿Usamos el mismo formato de salida en los tres problemas? En el 1 piden \"x y\" y en el 3 \"x, y\".", "plus": ["ana"]}, {"p": 1, "part": "A", "by": "ana", "h": 48, "text": "No está claro si el input termina con una línea vacía o con la palabra FIN.", "state": "Resuelto", "plus": ["bruno", "diego"], "replies": [{"by": "elena", "h": 30, "text": "Termina con FIN. Actualizado en Clearn.", "act": "Resuelto"}]}, {"p": 1, "part": "A", "by": "bruno", "h": 47, "text": "En los testcases públicos casi todos los trenes llegan justo con la carga exacta. Balancearía para pillar errores de < vs <=."}, {"p": 1, "part": "B", "by": "diego", "h": 46, "text": "La B se parece demasiado a la A: si no sacas la A, no sacas la B. ¿Hacemos algo independiente con la misma temática?", "plus": ["carla"], "replies": [{"by": "bruno", "h": 40, "text": "No estoy de acuerdo: la B agrega un if dentro del ciclo, sí evalúa algo más."}]}, {"p": 1, "part": "C", "by": "carla", "h": 45, "text": "El enunciado es muy largo para una pregunta de prueba. Sacaría el párrafo de la historia del tren.", "replies": [{"by": "felipe", "h": 20, "text": "Se acortó a la mitad.", "act": "Resuelto"}, {"by": "carla", "h": 3, "text": "Sigue habiendo dos párrafos de historia antes del objetivo.", "act": "Reabierto"}]}, {"p": 2, "part": "A", "by": "bruno", "h": 44, "text": "\"Entero positivo n ≥ 1\" puede leerse como que hay que validar el input. Pondría \"(n ≥ 1)\".", "state": "Resuelto", "replies": [{"by": "felipe", "h": 26, "text": "", "act": "Resuelto"}]}, {"p": 2, "part": "B", "by": "ana", "h": 42, "text": "Mi solución correcta dio timeout en un testcase. ¿El límite de tiempo está pensado para fuerza bruta?", "replies": [{"by": "elena", "h": 6, "text": "Revisando: vamos a reducir el tamaño de los casos."}]}, {"p": 2, "part": "C", "by": "carla", "h": 41, "text": "¿Pueden borrar el código entregado y escribir el suyo? Habría que decirlo explícitamente.", "state": "Descartado", "replies": [{"by": "felipe", "h": 25, "text": "El enunciado ya dice \"puedes hacer los cambios que estimes convenientes\".", "act": "Descartado"}]}, {"p": 3, "part": "A", "by": "diego", "h": 40, "text": "¿Los libros prestados cuentan como ocupados o como libres en el estante?", "plus": ["bruno"]}, {"p": 3, "part": "C", "by": "bruno", "h": 2, "text": "Agregaría una imagen para el caso en que no cabe el grupo de libros."}], "reviews": {"ana:2A": {"ok": true, "min": 12, "dif": 2}, "diego:2A": {"ok": true, "min": 10, "dif": 2}, "bruno:2A": {"min": 15, "dif": 3}, "carla:3B": {"ok": true, "min": 20, "dif": 4}}};
+const DATA = {"key": "demo", "title": "Revisión I2", "people": [{"id": "ana", "name": "Ana Rojas", "role": "prof"}, {"id": "bruno", "name": "Bruno Díaz", "role": "prof"}, {"id": "carla", "name": "Carla Soto", "role": "prof"}, {"id": "diego", "name": "Diego Paredes", "role": "prof"}, {"id": "elena", "name": "Elena Vidal", "role": "coord"}, {"id": "felipe", "name": "Felipe Mora", "role": "coord"}], "me": "ana", "seenH": {"ana": 24}, "problems": [{"id": 1, "title": "Tren de carga", "parts": ["A", "B", "C"]}, {"id": 2, "title": "Números felices", "parts": ["A", "B", "C"]}, {"id": 3, "title": "Biblioteca", "parts": ["A", "B", "C"]}], "comments": [{"p": 0, "part": "", "by": "carla", "h": 50, "text": "¿Usamos el mismo formato de salida en los tres problemas? En el 1 piden \"x y\" y en el 3 \"x, y\"."}, {"p": 1, "part": "A", "by": "ana", "h": 48, "text": "No está claro si el input termina con una línea vacía o con la palabra FIN.", "state": "Resuelto", "replies": [{"by": "elena", "h": 30, "text": "Termina con FIN. Actualizado en Clearn.", "act": "Resuelto"}]}, {"p": 1, "part": "A", "by": "bruno", "h": 47, "text": "En los testcases públicos casi todos los trenes llegan justo con la carga exacta. Balancearía para pillar errores de < vs <=."}, {"p": 1, "part": "B", "by": "diego", "h": 46, "text": "La B se parece demasiado a la A: si no sacas la A, no sacas la B. ¿Hacemos algo independiente con la misma temática?", "replies": [{"by": "bruno", "h": 40, "text": "No estoy de acuerdo: la B agrega un if dentro del ciclo, sí evalúa algo más."}]}, {"p": 1, "part": "C", "by": "carla", "h": 45, "text": "El enunciado es muy largo para una pregunta de prueba. Sacaría el párrafo de la historia del tren.", "replies": [{"by": "felipe", "h": 20, "text": "Se acortó a la mitad.", "act": "Resuelto"}, {"by": "carla", "h": 3, "text": "Sigue habiendo dos párrafos de historia antes del objetivo.", "act": "Reabierto"}]}, {"p": 2, "part": "A", "by": "bruno", "h": 44, "text": "\"Entero positivo n ≥ 1\" puede leerse como que hay que validar el input. Pondría \"(n ≥ 1)\".", "state": "Resuelto", "replies": [{"by": "felipe", "h": 26, "text": "", "act": "Resuelto"}]}, {"p": 2, "part": "B", "by": "ana", "h": 42, "text": "Mi solución correcta dio timeout en un testcase. ¿El límite de tiempo está pensado para fuerza bruta?", "replies": [{"by": "elena", "h": 6, "text": "Revisando: vamos a reducir el tamaño de los casos."}]}, {"p": 2, "part": "C", "by": "carla", "h": 41, "text": "¿Pueden borrar el código entregado y escribir el suyo? Habría que decirlo explícitamente.", "state": "Descartado", "replies": [{"by": "felipe", "h": 25, "text": "El enunciado ya dice \"puedes hacer los cambios que estimes convenientes\".", "act": "Descartado"}]}, {"p": 3, "part": "A", "by": "diego", "h": 40, "text": "¿Los libros prestados cuentan como ocupados o como libres en el estante?"}, {"p": 3, "part": "C", "by": "bruno", "h": 2, "text": "Agregaría una imagen para el caso en que no cabe el grupo de libros."}], "reviews": {"ana:2A": {"ok": true, "min": 12, "dif": 2}, "diego:2A": {"ok": true, "min": 10, "dif": 2}, "bruno:2A": {"ok": true, "min": 15, "dif": 3}, "carla:2A": {"ok": true, "min": 11, "dif": 2}, "carla:3B": {"ok": true, "min": 20, "dif": 4}}};
 const KEY = "revision-enunciados:" + DATA.key;
 const H = 3600e3;
 
@@ -116,7 +134,7 @@ function seed() {
   let n = 0;
   const comments = DATA.comments.map(c => ({
     id: ++n, problem: c.p, part: c.part || "", author: c.by, created: t(c.h), text: c.text,
-    state: c.state || "Pendiente", plus: c.plus || [],
+    state: c.state || "Pendiente",
     replies: (c.replies || []).map(r => ({ author: r.by, at: t(r.h), text: r.text || "", action: r.act })),
   }));
   const lastSeen = {};
@@ -124,8 +142,8 @@ function seed() {
   return { comments, reviews: structuredClone(DATA.reviews || {}), lastSeen, me: DATA.me, nextId: n + 1 };
 }
 
-let S;
-try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+let S = null;
+try { if (!/[?&]reset\b/.test(location.search)) S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
 if (!S || !S.comments) S = seed();
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -134,23 +152,46 @@ let since;
 function arrive() { since = S.lastSeen[S.me] || 0; S.lastSeen[S.me] = Date.now(); save(); }
 arrive();
 
-const ui = { open: null, adding: null, okEdit: null, expanded: {}, drafts: {} };
+const ui = { open: null, adding: null, expanded: {}, drafts: {} };
 const P = DATA.people;
-const person = id => P.find(p => p.id === id) || { name: "?", role: "" };
+const person = id => P.find(p => p.id === id) || { name: "?", role: "prof" };
 const first = id => person(id).name.split(" ")[0];
-const isCoord = () => person(S.me).role === "coord";
+const role = id => person(id).role;
+const isCoord = () => role(S.me) === "coord";
 const profs = () => P.filter(p => p.role === "prof");
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+const name = id => `<span class="n ${role(id)}" title="${role(id) === "coord" ? "Coordinación" : "Profe"}">${esc(first(id))}</span>`;
+const NEW = `<span class="new">nuevo</span>`;
 const isNewC = c => c.author !== S.me && c.created > since;
 const isNewR = r => r.author !== S.me && r.at > since;
 const pend = (pid, part) => S.comments.filter(c => c.problem === pid && (part === undefined || c.part === part) && c.state === "Pendiente").length;
-const GLYPH = { Pendiente: "○", Resuelto: "✓", Descartado: "–" };
+const GLYPH = { Pendiente: "○", Resuelto: "✓", Descartado: "✕" };
+const fmt = x => (Math.round(x * 10) / 10).toString().replace(".", ",");
+
+// ---------- per-part review: difficulty, time, OK ----------
+function partStats(k) {
+  const rs = profs().map(p => S.reviews[p.id + ":" + k] || {});
+  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+  const oks = profs().filter(p => (S.reviews[p.id + ":" + k] || {}).ok);
+  return { dif: avg(rs.map(r => r.dif).filter(Boolean)), min: avg(rs.map(r => r.min).filter(Boolean)),
+           oks, allOk: oks.length === profs().length };
+}
+function problemStats(p) {
+  const st = p.parts.map(x => partStats(p.id + x));
+  const mins = st.map(s => s.min).filter(v => v !== null);
+  const difs = st.map(s => s.dif).filter(v => v !== null);
+  return { min: mins.length === st.length ? mins.reduce((a, b) => a + b, 0) : null,
+           dif: difs.length ? difs.reduce((a, b) => a + b, 0) / difs.length : null,
+           allOk: st.every(s => s.allOk) };
+}
 
 function render() {
   document.getElementById("title").textContent = DATA.title;
-  document.getElementById("note").innerHTML = esc(DATA.note) + ' · <button data-act="reset">reiniciar ejemplo</button>';
+  const tot = DATA.problems.map(problemStats);
+  document.getElementById("est").textContent = tot.every(s => s.min !== null)
+    ? `tiempo estimado ≈ ${Math.round(tot.reduce((a, s) => a + s.min, 0))} min` : "";
   document.getElementById("me").innerHTML = P.map(p =>
-    `<option value="${p.id}"${p.id === S.me ? " selected" : ""}>${esc(p.name)}${p.role === "coord" ? " (coordinación)" : ""}</option>`).join("");
+    `<option value="${p.id}"${p.id === S.me ? " selected" : ""}>${p.role === "coord" ? "◆ " : ""}${esc(p.name)}</option>`).join("");
   renderNav();
   const groups = [{ id: 0, title: "Comentarios generales", parts: [] }, ...DATA.problems];
   document.getElementById("doc").innerHTML = groups.map(renderProblem).join("");
@@ -160,75 +201,85 @@ function render() {
 }
 
 function renderNav() {
-  const cnt = n => n ? ` <span class="cnt">${n}</span>` : "";
+  const cnt = n => n ? `<span class="cnt">${n}</span>` : "";
   document.getElementById("nav").innerHTML =
-    `<a class="prob" href="#p0">General${cnt(pend(0))}</a>` +
-    DATA.problems.map(p => `<a class="prob" href="#p${p.id}">${p.id}. ${esc(p.title)}${cnt(pend(p.id))}</a>` +
-      p.parts.map(x => `<a class="part" href="#p${p.id}${x}">Parte ${x}${cnt(pend(p.id, x))}</a>`).join("")).join("");
+    `<a class="prob" href="#p0"><span>General</span>${cnt(pend(0))}</a>` +
+    DATA.problems.map(p => `<a class="prob" href="#p${p.id}"><span>${p.id}. ${esc(p.title)}</span>${cnt(pend(p.id))}</a>` +
+      p.parts.map(x => `<a class="sub" href="#p${p.id}${x}"><span>Parte ${x}</span>${pend(p.id, x) ? cnt(pend(p.id, x)) : partStats(p.id + x).allOk ? `<span class="done">✓ OK</span>` : ""}</a>`).join("")).join("");
 }
 
 function renderProblem(p) {
   const n = pend(p.id);
-  const head = `<h2 id="p${p.id}"><span>${p.id ? p.id + ". " : ""}${esc(p.title)}</span>
-    <span class="cnt${n ? "" : " done"}">${n ? n + " pendiente" + (n > 1 ? "s" : "") : "sin pendientes"}</span></h2>`;
-  if (p.id === 0) return head + renderList(0, "");
+  let meta = n ? `<span class="cnt">${n} pendiente${n > 1 ? "s" : ""}</span>` : "";
+  if (p.id) {
+    const s = problemStats(p);
+    const bits = [];
+    if (s.min !== null) bits.push(`≈ ${Math.round(s.min)} min`);
+    if (s.dif !== null) bits.push(`dificultad ${fmt(s.dif)}`);
+    if (s.allOk && !n) bits.push(`<span class="alldone">✓ OK de todos</span>`);
+    meta = [meta, ...bits].filter(Boolean).join(" · ");
+  }
+  const head = `<h2><span>${p.id ? p.id + ". " : ""}${esc(p.title)}</span><span class="meta">${meta}</span></h2>`;
+  if (p.id === 0) return `<section class="prob" id="p0">${head}${renderList(0, "")}</section>`;
   const whole = S.comments.some(c => c.problem === p.id && c.part === "") || ui.adding === p.id + ":"
-    ? `<div class="ph"><h3>Todo el problema</h3>${renderList(p.id, "")}</div>` : "";
-  return head + whole + p.parts.map(x =>
-    `<div class="ph"><h3 id="p${p.id}${x}">Parte ${x} ${renderReview(p.id, x)}</h3>${renderList(p.id, x)}</div>`).join("");
+    ? `<div class="part"><h3>Todo el problema</h3>${renderList(p.id, "")}</div>` : "";
+  return `<section class="prob" id="p${p.id}">${head}${whole}${p.parts.map(x => {
+    const k = p.id + x, s = partStats(k);
+    return `<div class="part" id="p${k}"><h3><span>Parte ${x}</span>${s.allOk ? `<span class="okall">✓ OK de todos</span>` : ""}</h3>
+      ${renderReview(k, s)}${renderList(p.id, x)}</div>`;
+  }).join("")}</section>`;
 }
 
-function renderReview(pid, part) {
-  const k = pid + part;
-  const rs = profs().map(x => [x, (S.reviews[x.id + ":" + k] || {})]);
-  const oks = rs.filter(([, r]) => r.ok).map(([x]) => `<span class="y">✓ ${esc(first(x.id))}</span>`);
-  const mins = rs.map(([, r]) => r.min).filter(v => v > 0);
-  const difs = rs.map(([, r]) => r.dif).filter(v => v > 0);
-  const bits = [];
-  if (oks.length) bits.push(oks.join(" "));
-  if (mins.length) bits.push(`⏱ ${Math.min(...mins) === Math.max(...mins) ? mins[0] : Math.min(...mins) + "–" + Math.max(...mins)} min`);
-  if (difs.length) bits.push(`dificultad ${(difs.reduce((a, b) => a + b, 0) / difs.length).toFixed(1).replace(".0", "")}/5`);
-  const detail = rs.filter(([, r]) => r.ok || r.min || r.dif).map(([x, r]) =>
-    `${x.name}: ${r.ok ? "OK" : "sin OK"}${r.min ? ", " + r.min + " min" : ""}${r.dif ? ", dificultad " + r.dif : ""}`).join("\n");
+function renderReview(k, s) {
+  const sum = [];
+  sum.push(`<span class="avg">Dificultad <b>${s.dif === null ? "–" : fmt(s.dif) + "/5"}</b></span>`);
+  sum.push(`<span class="avg">Tiempo <b>${s.min === null ? "–" : Math.round(s.min) + " min"}</b></span>`);
+  sum.push(`<span class="avg">OK <b>${s.oks.length}/${profs().length}</b>${s.oks.length ? ` <span class="okers">${s.oks.map(p => esc(first(p.id))).join(", ")}</span>` : ""}</span>`);
+  const detail = profs().map(p => {
+    const r = S.reviews[p.id + ":" + k] || {};
+    return `${p.name}: dificultad ${r.dif || "–"}, tiempo ${r.min ? r.min + " min" : "–"}, ${r.ok ? "OK" : "sin OK"}`;
+  }).join("\n");
   let mine = "";
-  if (person(S.me).role === "prof") {
+  if (role(S.me) === "prof") {
     const r = S.reviews[S.me + ":" + k] || {};
-    mine = ui.okEdit === k
-      ? `<span class="okform">
-          <label><input type="checkbox" data-rev="ok" data-k="${k}"${r.ok ? " checked" : ""}> OK para mí</label>
-          <label>tiempo <input type="number" min="0" data-rev="min" data-k="${k}" value="${r.min ?? ""}"> min</label>
-          <label>dificultad <select data-rev="dif" data-k="${k}"><option value="">–</option>${[1, 2, 3, 4, 5].map(d => `<option${r.dif === d ? " selected" : ""}>${d}</option>`).join("")}</select></label>
-          <button class="lk" data-act="okedit" data-v="">listo</button></span>`
-      : `<button class="lk myok" data-act="okedit" data-v="${k}">${r.ok ? "mi OK ✓" : "dar mi OK"}</button>`;
+    mine = `<div class="mine"><span class="lbl">Tu revisión</span>
+      <span>Dificultad <span class="seg">${[1, 2, 3, 4, 5].map(d =>
+        `<button data-act="dif" data-k="${k}" data-v="${d}" class="${r.dif === d ? "on" : ""}">${d}</button>`).join("")}</span></span>
+      <label>Tiempo <input type="number" min="0" inputmode="numeric" data-rev="min" data-k="${k}" value="${r.min ?? ""}"> min</label>
+      <button data-act="ok" data-k="${k}" class="okbtn${r.ok ? " on" : ""}" title="${r.ok ? "Clic para retirar tu OK" : "Para mí esta parte está lista"}">${r.ok ? "✓ OK" : "Dar OK"}</button>
+    </div>`;
   }
-  return `<span class="rev" title="${esc(detail)}">${bits.join(" · ")}</span>${mine}`;
+  return `<div class="rev" title="${esc(detail)}">${sum.join("")}</div>${mine}`;
 }
 
 function renderList(pid, part) {
   const cs = S.comments.filter(c => c.problem === pid && c.part === part);
   const key = pid + ":" + part;
   const add = ui.adding === key
-    ? `<div class="box" style="margin-left:22px"><textarea data-draft="new${key}" data-focus placeholder="Tu comentario. Si alguien ya dijo lo mismo, dale +1."></textarea>
+    ? `<div class="box" style="margin-left:24px"><textarea data-draft="new${key}" data-focus placeholder="Tu comentario"></textarea>
         <div class="row"><button class="btn pri" data-act="post" data-v="${key}">Publicar</button>
         <button class="lk" data-act="add" data-v="">cancelar</button><span class="hint">⌘/Ctrl + Enter publica</span></div></div>`
     : `<div class="add"><button class="lk" data-act="add" data-v="${key}">+ comentar</button></div>`;
   return cs.map(renderComment).join("") + add;
 }
 
+function stateTitle(c) {
+  const last = [...c.replies].reverse().find(r => r.action);
+  return c.state + (last && c.state !== "Pendiente" ? " por " + person(last.author).name : "");
+}
+
 function renderComment(c) {
   const long = c.text.length > 320 && !ui.expanded[c.id];
-  const plus = c.plus.length ? ` <span class="plus1">+1 ${esc(c.plus.map(first).join(", "))}</span>` : "";
+  const silentNew = c.replies.find(r => !r.text && r.action !== "Reabierto" && isNewR(r));
   const reps = c.replies.map(r => {
-    const d = isNewR(r) ? `<span class="dot"></span>` : "";
-    if (!r.text) return r.action === "Reabierto" ? `<div class="r">${d}<span class="ev">${esc(first(r.author))} reabrió</span></div>` : "";
-    return `<div class="r">${d}<b>${esc(first(r.author))}</b>${r.action === "Reabierto" ? ` <span class="ev">(reabrió)</span>` : ""}: ${esc(r.text)}</div>`;
+    const nw = isNewR(r) ? NEW : "";
+    if (!r.text) return r.action === "Reabierto" ? `<div class="r ${role(r.author)}">${nw}${name(r.author)} <span class="ev">reabrió</span></div>` : "";
+    return `<div class="r ${role(r.author)}">${nw}${name(r.author)}${r.action === "Reabierto" ? ` <span class="ev">(reabrió)</span>` : ""}: ${esc(r.text)}</div>`;
   }).join("");
-  const a = [];
-  if (c.author !== S.me) a.push(`<button data-act="plus" data-v="${c.id}" class="${c.plus.includes(S.me) ? "on" : ""}">+1</button>`);
-  a.push(`<button data-act="reply" data-v="${c.id}">responder</button>`);
+  const a = [`<button data-act="reply" data-v="${c.id}">responder</button>`];
   if (c.state === "Pendiente") {
     if (isCoord()) a.push(`<button data-act="state" data-v="${c.id}" data-s="Resuelto">✓ resuelto</button>`,
-                          `<button data-act="state" data-v="${c.id}" data-s="Descartado">– descartar</button>`);
+                          `<button data-act="state" data-v="${c.id}" data-s="Descartado">✕ descartar</button>`);
   } else a.push(`<button data-act="reply" data-v="${c.id}" data-reopen="1">reabrir</button>`);
   let box = "";
   if (ui.open && ui.open.id === c.id) {
@@ -241,17 +292,12 @@ function renderComment(c) {
         <button class="lk" data-act="reply" data-v="">cancelar</button></div></div>`;
   }
   return `<div class="c${c.state !== "Pendiente" ? " closed" : ""}${long ? " clamp" : ""}">
-    ${isNewC(c) || c.replies.some(r => !r.text && isNewR(r)) ? `<span class="dot"></span>` : ""}<span class="st ${c.state}" title="${esc(stateTitle(c))}">${GLYPH[c.state]}</span>
-    <div class="body"><b>${esc(first(c.author))}:</b> ${esc(c.text)}</div>
-    ${long ? `<button class="more" data-act="expand" data-v="${c.id}">ver todo</button>` : ""}${plus}
+    <span class="st ${c.state}" title="${esc(stateTitle(c))}">${GLYPH[c.state]}</span>
+    <div class="body">${isNewC(c) ? NEW : silentNew ? `<span class="new">${c.state.toLowerCase()}</span>` : ""}${name(c.author)}: ${esc(c.text)}</div>
+    ${long ? `<button class="more" data-act="expand" data-v="${c.id}">ver todo</button>` : ""}
     ${reps}
     <div class="acts">${a.join("")}</div>${box}
   </div>`;
-}
-
-function stateTitle(c) {
-  const last = [...c.replies].reverse().find(r => r.action);
-  return c.state + (last && c.state !== "Pendiente" ? " por " + person(last.author).name : "");
 }
 
 function setState(c, state, text) {
@@ -267,9 +313,11 @@ function post(key) {
   if (!text) return;
   const [pid, part] = key.split(":");
   S.comments.push({ id: S.nextId++, problem: Number(pid), part, author: S.me, created: Date.now(),
-    text, state: "Pendiente", plus: [], replies: [] });
+    text, state: "Pendiente", replies: [] });
   delete ui.drafts["new" + key]; ui.adding = null; save(); render();
 }
+
+const myReview = k => S.reviews[S.me + ":" + k] || (S.reviews[S.me + ":" + k] = {});
 
 document.addEventListener("input", e => { if (e.target.dataset.draft) ui.drafts[e.target.dataset.draft] = e.target.value; });
 document.addEventListener("keydown", e => {
@@ -283,14 +331,11 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.id === "me") { S.me = t.value; arrive(); ui.open = ui.adding = ui.okEdit = null; render(); return; }
-  if (!t.dataset.rev) return;
-  const k = S.me + ":" + t.dataset.k;
-  const r = S.reviews[k] || (S.reviews[k] = {});
-  if (t.dataset.rev === "ok") r.ok = t.checked;
-  if (t.dataset.rev === "min") r.min = t.value === "" ? undefined : Math.max(0, parseInt(t.value, 10) || 0);
-  if (t.dataset.rev === "dif") r.dif = t.value === "" ? undefined : Number(t.value);
-  save(); render();
+  if (t.id === "me") { S.me = t.value; arrive(); ui.open = ui.adding = null; render(); return; }
+  if (t.dataset.rev === "min") {
+    myReview(t.dataset.k).min = t.value === "" ? undefined : Math.max(0, parseInt(t.value, 10) || 0);
+    save(); render();
+  }
 });
 document.addEventListener("click", e => {
   const b = e.target.closest("button[data-act]");
@@ -298,12 +343,8 @@ document.addEventListener("click", e => {
   const v = b.dataset.v;
   const c = S.comments.find(x => String(x.id) === v);
   switch (b.dataset.act) {
-    case "reset":
-      if (!confirm("¿Volver al ejemplo original? Se pierde lo que hayas hecho.")) return;
-      S = seed(); arrive(); Object.assign(ui, { open: null, adding: null, okEdit: null, drafts: {} }); break;
     case "add": ui.adding = v || null; ui.open = null; break;
     case "post": post(v); return;
-    case "plus": c.plus = c.plus.includes(S.me) ? c.plus.filter(x => x !== S.me) : [...c.plus, S.me]; save(); break;
     case "reply": ui.open = v ? { id: Number(v), reopen: !!b.dataset.reopen } : null; ui.adding = null; break;
     case "state": setState(c, b.dataset.s, ""); save(); break;
     case "send": {
@@ -312,7 +353,8 @@ document.addEventListener("click", e => {
       delete ui.drafts["r" + v]; ui.open = null; save(); break;
     }
     case "expand": ui.expanded[v] = true; break;
-    case "okedit": ui.okEdit = v || null; break;
+    case "dif": { const r = myReview(b.dataset.k); r.dif = r.dif === Number(v) ? undefined : Number(v); save(); break; }
+    case "ok": { const r = myReview(b.dataset.k); r.ok = !r.ok; save(); break; }
   }
   render();
 });
