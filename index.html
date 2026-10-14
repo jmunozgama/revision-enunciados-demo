@@ -242,8 +242,7 @@ function renderProblem(p) {
   }
   const head = `<h2><span>${p.id ? p.id + ". " : ""}${esc(p.title)}</span><span class="meta">${meta}</span></h2>`;
   if (p.id === 0) return `<section class="prob" id="p0">${head}${renderList(0, "")}</section>`;
-  const whole = S.comments.some(c => c.problem === p.id && c.part === "") || ui.adding === p.id + ":"
-    ? `<div class="part"><h3>Todo el problema</h3>${renderList(p.id, "")}</div>` : "";
+  const whole = `<div class="part"><h3>Todo el problema</h3>${renderList(p.id, "")}</div>`;
   return `<section class="prob" id="p${p.id}">${head}${whole}${p.parts.map(x => {
     const k = p.id + x, s = partStats(k);
     return `<div class="part" id="p${k}"><h3><span>Parte ${x}</span>${s.allOk ? `<span class="okall">✓ OK de todos</span>` : ""}</h3>
@@ -287,7 +286,7 @@ function renderList(pid, part) {
     ? `<div class="box" style="margin-left:24px"><textarea data-draft="new${key}" data-focus placeholder="Tu comentario"></textarea>
         <div class="row"><button class="btn pri" data-act="post" data-v="${key}">Publicar</button>
         <button class="lk" data-act="add" data-v="">cancelar</button><span class="hint">⌘/Ctrl + Enter publica</span></div></div>`
-    : `<div class="add"><button class="lk" data-act="add" data-v="${key}">+ comentar</button></div>`;
+    : `<div class="add"><button class="lk" data-act="add" data-v="${key}">+ Nuevo comentario</button></div>`;
   return cs.map(renderComment).join("") + add;
 }
 
