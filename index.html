@@ -71,6 +71,11 @@ h3 { font-size: 15px; margin: 0; padding-bottom: 4px; border-bottom: 1px solid v
 .okbtn { border: 1px solid var(--line); background: var(--card); border-radius: 6px; padding: 1px 12px;
   cursor: pointer; color: var(--muted); }
 .okbtn.on { background: var(--ok); border-color: var(--ok); color: #fff; font-weight: 600; }
+.all { display: grid; grid-template-columns: max-content max-content max-content max-content; gap: 2px 22px;
+  font-size: 13px; background: var(--bg); border-radius: 8px; padding: 6px 10px; margin: 2px 0 6px; }
+.all .h { color: var(--muted); }
+.all .y { color: var(--ok); font-weight: 600; }
+.all .x { color: var(--faint); }
 
 .c { position: relative; padding: 9px 0 9px 24px; border-bottom: 1px solid var(--line); }
 .c .st { position: absolute; left: 2px; top: 9px; width: 16px; text-align: center; font-weight: 700; }
@@ -83,8 +88,8 @@ h3 { font-size: 15px; margin: 0; padding-bottom: 4px; border-bottom: 1px solid v
 .n.prof { font-weight: 700; color: var(--prof); }
 .n.coord { font-weight: 700; color: var(--coord); }
 .n.coord::before { content: "◆ "; font-size: 11px; }
-.new { display: inline-block; font-size: 11px; font-weight: 700; color: var(--new); background: var(--new-soft);
-  border-radius: 999px; padding: 0 7px; margin-right: 6px; vertical-align: 1px; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--new);
+  margin-right: 6px; vertical-align: 2px; }
 .r { font-size: 14px; margin: 6px 0 0; padding: 4px 10px; border-left: 3px solid var(--line);
   white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); }
 .r.coord { background: var(--coord-soft); border-left-color: var(--coord); border-radius: 0 6px 6px 0; }
@@ -161,7 +166,7 @@ const isCoord = () => role(S.me) === "coord";
 const profs = () => P.filter(p => p.role === "prof");
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
 const name = id => `<span class="n ${role(id)}" title="${role(id) === "coord" ? "Coordinación" : "Profe"}">${esc(first(id))}</span>`;
-const NEW = `<span class="new">nuevo</span>`;
+const NEW = `<span class="dot" title="Nuevo para ti"></span>`;
 const isNewC = c => c.author !== S.me && c.created > since;
 const isNewR = r => r.author !== S.me && r.at > since;
 const pend = (pid, part) => S.comments.filter(c => c.problem === pid && (part === undefined || c.part === part) && c.state === "Pendiente").length;
@@ -248,6 +253,13 @@ function renderReview(k, s) {
       <label>Tiempo <input type="number" min="0" inputmode="numeric" data-rev="min" data-k="${k}" value="${r.min ?? ""}"> min</label>
       <button data-act="ok" data-k="${k}" class="okbtn${r.ok ? " on" : ""}" title="${r.ok ? "Clic para retirar tu OK" : "Para mí esta parte está lista"}">${r.ok ? "✓ OK" : "Dar OK"}</button>
     </div>`;
+  } else {
+    mine = `<div class="all"><span class="h">Profe</span><span class="h">Dificultad</span><span class="h">Tiempo</span><span class="h">OK</span>${
+      profs().map(p => {
+        const r = S.reviews[p.id + ":" + k] || {};
+        return `<span>${esc(first(p.id))}</span><span>${r.dif ? r.dif + "/5" : `<span class="x">–</span>`}</span>` +
+          `<span>${r.min ? r.min + " min" : `<span class="x">–</span>`}</span><span>${r.ok ? `<span class="y">✓ OK</span>` : `<span class="x">–</span>`}</span>`;
+      }).join("")}</div>`;
   }
   return `<div class="rev" title="${esc(detail)}">${sum.join("")}</div>${mine}`;
 }
@@ -293,7 +305,7 @@ function renderComment(c) {
   }
   return `<div class="c${c.state !== "Pendiente" ? " closed" : ""}${long ? " clamp" : ""}">
     <span class="st ${c.state}" title="${esc(stateTitle(c))}">${GLYPH[c.state]}</span>
-    <div class="body">${isNewC(c) ? NEW : silentNew ? `<span class="new">${c.state.toLowerCase()}</span>` : ""}${name(c.author)}: ${esc(c.text)}</div>
+    <div class="body">${isNewC(c) || silentNew ? NEW : ""}${name(c.author)}: ${esc(c.text)}</div>
     ${long ? `<button class="more" data-act="expand" data-v="${c.id}">ver todo</button>` : ""}
     ${reps}
     <div class="acts">${a.join("")}</div>${box}
