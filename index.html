@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión de enunciados</title>
+<style>
+:root {
+  --bg: #f6f7f9; --card: #fff; --ink: #1d232b; --muted: #667080; --line: #dde1e7;
+  --accent: #2f5fd0; --accent-soft: #e6edfb;
+  --pend: #b26a00; --pend-soft: #fff2db;
+  --ok: #1f7a46; --ok-soft: #e1f4e8;
+  --disc: #6b7280; --disc-soft: #eceef1;
+  --new: #d03b6b;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171c; --card: #1d2128; --ink: #e6e9ee; --muted: #9aa3b0; --line: #313742;
+    --accent: #7ea2ff; --accent-soft: #24304a;
+    --pend: #f0b45a; --pend-soft: #3a2f1c;
+    --ok: #6fd39a; --ok-soft: #1c3527;
+    --disc: #a3aab5; --disc-soft: #2a2f37;
+    --new: #ff7aa3;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 1px solid var(--line); background: var(--card);
+  border-radius: 8px; padding: 4px 10px; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.link { border: none; background: none; padding: 2px 4px; color: var(--accent); }
+select, input, textarea { background: var(--card); border: 1px solid var(--line);
+  border-radius: 8px; padding: 5px 8px; }
+textarea { width: 100%; min-height: 60px; resize: vertical; }
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+main.wrap { padding-bottom: 80px; }
+
+.demo { background: var(--accent-soft); color: var(--ink); font-size: 13px;
+  padding: 6px 16px; text-align: center; }
+header { position: sticky; top: 0; z-index: 5; background: var(--bg);
+  border-bottom: 1px solid var(--line); }
+.top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+  justify-content: space-between; padding: 10px 0; }
+.top h1 { font-size: 18px; margin: 0; }
+.top label { font-size: 13px; color: var(--muted); }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 10px; align-items: center; }
+.chip { border-radius: 999px; font-size: 13px; }
+.chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip .n { opacity: .7; margin-left: 3px; }
+.spacer { flex: 1; }
+.sortbox { white-space: nowrap; }
+
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  gap: 10px; margin: 16px 0; }
+.sum { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 12px; cursor: pointer; text-align: left; }
+.sum b { display: block; font-size: 14px; }
+.sum .meta { font-size: 13px; color: var(--muted); }
+.sum.ready { border-color: var(--ok); }
+
+section.problem { margin-top: 22px; scroll-margin-top: 120px; }
+.ph { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.ph h2 { font-size: 17px; margin: 0; }
+.oks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0;
+  font-size: 13px; color: var(--muted); }
+.okb { border-radius: 999px; padding: 1px 8px; border: 1px solid var(--line); }
+.okb.yes { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.myok { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--card);
+  border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; }
+.myok input[type=number] { width: 70px; }
+
+.composer { margin: 10px 0; }
+.composer .row { display: flex; gap: 8px; margin-top: 6px; align-items: center; flex-wrap: wrap; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 12px; margin: 8px 0; position: relative; }
+.card.isnew { border-left: 4px solid var(--new); }
+.card.closed .text { color: var(--muted); }
+.ch { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px;
+  color: var(--muted); }
+.ch .who { color: var(--ink); font-weight: 600; }
+.pill { border-radius: 999px; padding: 1px 8px; font-size: 12px; font-weight: 600; }
+.pill.Pendiente { background: var(--pend-soft); color: var(--pend); }
+.pill.Resuelto { background: var(--ok-soft); color: var(--ok); }
+.pill.Descartado { background: var(--disc-soft); color: var(--disc); }
+.part { font-weight: 700; color: var(--ink); }
+.newtag { color: var(--new); font-weight: 700; }
+.text { margin: 6px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.plus.on { background: var(--accent-soft); border-color: var(--accent); }
+.plus .names { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.replies { margin: 8px 0 0 10px; padding-left: 10px; border-left: 2px solid var(--line); }
+.reply { margin: 6px 0; font-size: 14px; }
+.reply .ch { font-size: 12px; }
+.reply.event { color: var(--muted); font-size: 13px; font-style: italic; }
+.empty { color: var(--muted); font-size: 14px; padding: 6px 0; }
+.help { font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="demo">Demo con datos inventados. Lo que hagas se guarda solo en tu navegador.
+  <button class="link" data-act="reset">Reiniciar demo</button></div>
+<header><div class="wrap">
+  <div class="top">
+    <h1>Revisión de enunciados · <span id="evalname"></span></h1>
+    <div><label for="me">Soy</label> <select id="me"></select></div>
+  </div>
+  <div class="filters" id="filters"></div>
+</div></header>
+<main class="wrap">
+  <div class="summary" id="summary"></div>
+  <div id="problems"></div>
+</main>
+
+<script>
+"use strict";
+const KEY = "revision-enunciados-demo-v1";
+const H = 3600e3;
+
+// ---------- invented demo data ----------
+function seed() {
+  const now = Date.now();
+  const t = h => now - h * H;
+  const people = [
+    { id: "ana", name: "Ana Rojas", role: "prof" },
+    { id: "bruno", name: "Bruno Díaz", role: "prof" },
+    { id: "carla", name: "Carla Soto", role: "prof" },
+    { id: "diego", name: "Diego Paredes", role: "prof" },
+    { id: "elena", name: "Elena Vidal", role: "coord" },
+    { id: "felipe", name: "Felipe Mora", role: "coord" },
+  ];
+  const problems = [
+    { id: 1, title: "Tren de carga", parts: ["A", "B", "C"] },
+    { id: 2, title: "Números felices", parts: ["A", "B", "C"] },
+    { id: 3, title: "Biblioteca", parts: ["A", "B", "C"] },
+  ];
+  let n = 0;
+  const c = (problem, part, author, h, text, extra = {}) => ({
+    id: ++n, problem, part, author, created: t(h), text, state: "Pendiente",
+    plus: [], replies: [], ...extra,
+  });
+  const r = (author, h, text, action) => ({ author, at: t(h), text, action });
+  const comments = [
+    c(0, "", "carla", 50, "¿Usamos el mismo formato de salida en los tres problemas? En el 1 piden \"x y\" y en el 3 \"x, y\".",
+      { plus: ["ana"] }),
+    c(1, "A", "ana", 48, "No está claro si el input termina con una línea vacía o con la palabra FIN.",
+      { plus: ["bruno", "diego"], state: "Resuelto",
+        replies: [r("elena", 30, "Se aclaró: termina con FIN. Actualizado en Clearn.", "Resuelto")] }),
+    c(1, "A", "bruno", 47, "En los testcases públicos casi todos los trenes llegan justo con la carga exacta. Balancearía para pillar errores de < vs <=."),
+    c(1, "B", "diego", 46, "La B se parece demasiado a la A: si no sacas la A, no sacas la B. ¿Hacemos algo independiente con la misma temática?",
+      { plus: ["carla"], replies: [
+        r("bruno", 40, "No estoy de acuerdo: la B agrega un if dentro del ciclo, sí evalúa algo más."),
+        r("carla", 38, "Igual me preocupa la dependencia. Podría recibir los datos de la A ya calculados."),
+      ] }),
+    c(1, "C", "carla", 45, "El enunciado es muy largo para una pregunta de prueba. Sacaría el párrafo de la historia del tren.",
+      { replies: [
+        r("felipe", 20, "Se acortó a la mitad.", "Resuelto"),
+        r("carla", 3, "Sigue habiendo dos párrafos de historia antes del objetivo.", "Reabierto"),
+      ] }),
+    c(2, "A", "bruno", 44, "\"Entero positivo n ≥ 1\" puede leerse como que hay que validar el input. Pondría \"(n ≥ 1)\".",
+      { state: "Resuelto", replies: [r("felipe", 26, "Cambiado.", "Resuelto")] }),
+    c(2, "A", "diego", 43, "El ejemplo explica el algoritmo paso a paso. Lo dejaría solo con input y output.",
+      { plus: ["ana"] }),
+    c(2, "B", "ana", 42, "Mi solución correcta dio timeout en un testcase. ¿El límite de tiempo está pensado para fuerza bruta?",
+      { replies: [r("elena", 6, "Revisando: la solución oficial es O(n) y la fuerza bruta O(n²). Vamos a reducir el tamaño de los casos.")] }),
+    c(2, "C", "carla", 41, "¿Pueden borrar el código entregado y escribir el suyo? Habría que decirlo explícitamente.",
+      { state: "Descartado", replies: [r("felipe", 25, "Se deja libre: el enunciado ya dice \"puedes hacer los cambios que estimes convenientes\".", "Descartado")] }),
+    c(3, "A", "diego", 40, "¿Los libros prestados cuentan como ocupados o como libres en el estante?",
+      { plus: ["bruno"] }),
+    c(3, "B", "bruno", 39, "Recordar que pueden leer las preguntas en cualquier orden: hay que volver a explicar cómo funciona la biblioteca."),
+    c(3, "C", "ana", 2, "La imagen del estante ayuda mucho. Agregaría otra para el caso en que no cabe el grupo de libros."),
+  ];
+  const oks = {
+    "ana:2": { ok: true, minutes: 12, difficulty: 2 },
+    "bruno:2": { ok: false, minutes: 15, difficulty: 3 },
+    "carla:3": { ok: true, minutes: 20, difficulty: 4 },
+    "diego:2": { ok: true, minutes: 10, difficulty: 2 },
+  };
+  const lastSeen = {};
+  people.forEach(p => lastSeen[p.id] = t(24));
+  return { evalName: "I2 (demo)", people, problems, comments, oks, lastSeen, me: "ana", nextId: n + 1 };
+}
+
+// ---------- state ----------
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+if (!S || !S.comments) S = seed();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+const ui = { filter: "Todos", sort: "parte", open: {}, drafts: {}, composer: {} };
+// The "since" mark is fixed when you arrive, so marking things seen does not hide them mid-read.
+let since = S.lastSeen[S.me] || 0;
+
+const person = id => S.people.find(p => p.id === id) || { name: "?", role: "" };
+const me = () => person(S.me);
+const isCoord = () => me().role === "coord";
+const profs = () => S.people.filter(p => p.role === "prof");
+const esc = s => String(s).replace(/[&<>"']/g, ch =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+function ago(ts) {
+  const m = Math.round((Date.now() - ts) / 60000);
+  if (m < 1) return "ahora";
+  if (m < 60) return `hace ${m} min`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.round(h / 24);
+  return d === 1 ? "ayer" : `hace ${d} días`;
+}
+const isNewComment = c => c.author !== S.me && c.created > since;
+const isNewReply = r => r.author !== S.me && r.at > since;
+const hasNews = c => isNewComment(c) || c.replies.some(isNewReply);
+
+// ---------- rendering ----------
+function render() {
+  document.getElementById("evalname").textContent = S.evalName;
+  const sel = document.getElementById("me");
+  sel.innerHTML = S.people.map(p =>
+    `<option value="${p.id}"${p.id === S.me ? " selected" : ""}>${esc(p.name)} (${p.role === "prof" ? "profe" : "coordinación"})</option>`).join("");
+  renderFilters();
+  renderSummary();
+  const groups = [{ id: 0, title: "Comentarios generales", parts: [] }, ...S.problems];
+  document.getElementById("problems").innerHTML = groups.map(renderProblem).join("");
+  restoreDrafts();
+}
+
+function visible(c) {
+  if (ui.filter === "Novedades") return hasNews(c);
+  if (ui.filter === "Todos") return true;
+  return c.state === ui.filter;
+}
+
+function renderFilters() {
+  const count = f => S.comments.filter(c => f === "Todos" ? true : f === "Novedades" ? hasNews(c) : c.state === f).length;
+  const chips = ["Todos", "Pendiente", "Resuelto", "Descartado", "Novedades"].map(f =>
+    `<button class="chip${ui.filter === f ? " on" : ""}" data-act="filter" data-v="${f}">${f === "Novedades" ? "Novedades para ti" : f}<span class="n">${count(f)}</span></button>`).join("");
+  document.getElementById("filters").innerHTML = chips +
+    `<button class="link" data-act="seen" title="Lo que ves ahora deja de contar como novedad">Marcar todo como visto</button>
+     <span class="spacer"></span>
+     <span class="sortbox"><label class="help" for="sort">Ordenar</label>
+     <select id="sort">
+       <option value="parte"${ui.sort === "parte" ? " selected" : ""}>por parte</option>
+       <option value="apoyos"${ui.sort === "apoyos" ? " selected" : ""}>más +1 primero</option>
+       <option value="reciente"${ui.sort === "reciente" ? " selected" : ""}>más recientes</option>
+     </select></span>`;
+}
+
+function okCount(pid) { return profs().filter(p => S.oks[p.id + ":" + pid]?.ok).length; }
+
+function renderSummary() {
+  const total = profs().length;
+  document.getElementById("summary").innerHTML = S.problems.map(p => {
+    const cs = S.comments.filter(c => c.problem === p.id);
+    const pend = cs.filter(c => c.state === "Pendiente").length;
+    const news = cs.filter(hasNews).length;
+    const ok = okCount(p.id);
+    const ready = pend === 0 && ok === total;
+    return `<button class="sum${ready ? " ready" : ""}" data-act="jump" data-v="${p.id}">
+      <b>${p.id}. ${esc(p.title)}</b>
+      <span class="meta">${ready ? "✓ Listo · " : ""}${pend} pendiente${pend === 1 ? "" : "s"} · OK ${ok}/${total}${news ? ` · <span class="newtag">${news} nuevo${news === 1 ? "" : "s"}</span>` : ""}</span>
+    </button>`;
+  }).join("");
+}
+
+function sorted(list, parts) {
+  const order = c => parts.indexOf(c.part);
+  const by = {
+    parte: (a, b) => order(a) - order(b) || a.created - b.created,
+    apoyos: (a, b) => b.plus.length - a.plus.length || a.created - b.created,
+    reciente: (a, b) => lastActivity(b) - lastActivity(a),
+  }[ui.sort];
+  return list.slice().sort(by);
+}
+const lastActivity = c => Math.max(c.created, ...c.replies.map(r => r.at));
+
+function renderProblem(p) {
+  const cs = sorted(S.comments.filter(c => c.problem === p.id && visible(c)), p.parts);
+  const head = p.id === 0
+    ? `<div class="ph"><h2>${esc(p.title)}</h2><span class="help">sobre la evaluación completa</span></div>`
+    : `<div class="ph"><h2>${p.id}. ${esc(p.title)}</h2><span class="help">partes ${p.parts.join(", ")}</span></div>
+       ${renderOks(p)}`;
+  return `<section class="problem" id="p${p.id}">
+    ${head}
+    ${renderComposer(p)}
+    ${cs.length ? cs.map(renderComment).join("") : `<div class="empty">${ui.filter === "Todos" ? "Sin comentarios todavía." : "Nada en este filtro."}</div>`}
+  </section>`;
+}
+
+function renderOks(p) {
+  const badges = profs().map(x => {
+    const o = S.oks[x.id + ":" + p.id];
+    const extra = o && (o.minutes || o.difficulty)
+      ? ` · ${o.minutes ? o.minutes + " min" : ""}${o.minutes && o.difficulty ? ", " : ""}${o.difficulty ? "dif. " + o.difficulty + "/5" : ""}` : "";
+    return `<span class="okb${o?.ok ? " yes" : ""}">${o?.ok ? "✓ " : ""}${esc(x.name.split(" ")[0])}${extra}</span>`;
+  }).join("");
+  let mine = "";
+  if (me().role === "prof") {
+    const o = S.oks[S.me + ":" + p.id] || {};
+    mine = `<div class="myok">
+      <label><input type="checkbox" data-act="ok" data-v="${p.id}"${o.ok ? " checked" : ""}> Para mí este problema está OK</label>
+      <span class="help">Opcional:</span>
+      <label>tiempo <input type="number" min="0" placeholder="min" data-act="minutes" data-v="${p.id}" value="${o.minutes ?? ""}"></label>
+      <label>dificultad <select data-act="difficulty" data-v="${p.id}">
+        <option value="">–</option>${[1, 2, 3, 4, 5].map(d => `<option${o.difficulty === d ? " selected" : ""}>${d}</option>`).join("")}
+      </select></label>
+    </div>`;
+  }
+  return `<div class="oks">OK de los profes: ${badges}</div>${mine}`;
+}
+
+function renderComposer(p) {
+  const key = "new" + p.id;
+  if (!ui.composer[p.id]) return `<div class="composer"><button data-act="compose" data-v="${p.id}">+ Comentar${p.id ? " este problema" : ""}</button></div>`;
+  const partSel = p.id === 0 ? "" : `<select data-draftpart="${p.id}">
+      ${p.parts.map(x => `<option value="${x}">Parte ${x}</option>`).join("")}<option value="">Todo el problema</option></select>`;
+  return `<div class="composer">
+    <textarea data-draft="${key}" placeholder="Escribe tu comentario. Si alguien ya dijo lo mismo, mejor dale +1."></textarea>
+    <div class="row">${partSel}
+      <button class="primary" data-act="post" data-v="${p.id}">Publicar</button>
+      <button class="link" data-act="cancelcompose" data-v="${p.id}">Cancelar</button></div>
+  </div>`;
+}
+
+function renderComment(c) {
+  const p = S.problems.find(x => x.id === c.problem);
+  const mineP = c.plus.includes(S.me);
+  const names = c.plus.map(id => person(id).name.split(" ")[0]).join(", ");
+  const open = ui.open[c.id];
+  const btns = [];
+  if (c.author !== S.me) btns.push(`<button class="plus${mineP ? " on" : ""}" data-act="plus" data-v="${c.id}" title="Estoy de acuerdo">+1${c.plus.length ? " · " + c.plus.length : ""}${names ? `<span class="names">${esc(names)}</span>` : ""}</button>`);
+  else if (c.plus.length) btns.push(`<span class="help">+1 de ${esc(names)}</span>`);
+  btns.push(`<button class="link" data-act="reply" data-v="${c.id}">Responder</button>`);
+  let box = "";
+  if (open) {
+    const acts = [`<button class="primary" data-act="send" data-v="${c.id}">Responder</button>`];
+    if (c.state === "Pendiente") {
+      if (isCoord()) acts.push(`<button data-act="send" data-v="${c.id}" data-state="Resuelto">Responder y marcar resuelto</button>`,
+                               `<button data-act="send" data-v="${c.id}" data-state="Descartado">Responder y descartar</button>`);
+    } else {
+      acts.push(`<button data-act="send" data-v="${c.id}" data-state="Pendiente">Responder y reabrir</button>`);
+    }
+    acts.push(`<button class="link" data-act="reply" data-v="${c.id}">Cancelar</button>`);
+    box = `<div class="composer"><textarea data-draft="r${c.id}" placeholder="${c.state === "Pendiente" ? "Respuesta (opcional si solo cambias el estado)" : "¿Por qué no está resuelto?"}"></textarea>
+      <div class="row">${acts.join("")}</div></div>`;
+  } else if (isCoord() && c.state === "Pendiente") {
+    btns.push(`<button data-act="quick" data-v="${c.id}" data-state="Resuelto">✓ Resuelto</button>`);
+  } else if (c.state !== "Pendiente") {
+    btns.push(`<button class="link" data-act="reply" data-v="${c.id}">Reabrir…</button>`);
+  }
+  const replies = c.replies.map(r => {
+    const verb = { Resuelto: "marcó como resuelto", Descartado: "descartó", Reabierto: "reabrió" }[r.action];
+    const nw = isNewReply(r) ? " isnew" : "";
+    if (!r.text) return `<div class="reply event">${esc(person(r.author).name)} ${verb} · ${ago(r.at)}${nw ? ` <span class="newtag">nuevo</span>` : ""}</div>`;
+    return `<div class="reply${nw}"><div class="ch"><span class="who">${esc(person(r.author).name)}</span>
+      ${verb ? `<span>${verb}</span>` : ""}<span>${ago(r.at)}</span>${nw ? `<span class="newtag">nuevo</span>` : ""}</div>
+      <div class="text">${esc(r.text)}</div></div>`;
+  }).join("");
+  return `<article class="card${hasNews(c) ? " isnew" : ""}${c.state !== "Pendiente" ? " closed" : ""}">
+    <div class="ch"><span class="pill ${c.state}">${c.state}</span>
+      ${p ? `<span class="part">${c.part ? "Parte " + c.part : "Todo el problema"}</span>` : ""}
+      <span class="who">${esc(person(c.author).name)}</span><span>${ago(c.created)}</span>
+      ${isNewComment(c) ? `<span class="newtag">nuevo</span>` : ""}</div>
+    <div class="text">${esc(c.text)}</div>
+    <div class="actions">${btns.join("")}</div>
+    ${replies ? `<div class="replies">${replies}</div>` : ""}
+    ${box}
+  </article>`;
+}
+
+function restoreDrafts() {
+  document.querySelectorAll("[data-draft]").forEach(t => { t.value = ui.drafts[t.dataset.draft] || ""; });
+}
+
+// ---------- actions ----------
+function setState(c, state, text) {
+  const action = state === c.state ? undefined : state === "Pendiente" ? "Reabierto" : state;
+  if (!text && !action) return false;
+  c.replies.push({ author: S.me, at: Date.now(), text: text || "", action });
+  c.state = state;
+  return true;
+}
+
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.draft) ui.drafts[t.dataset.draft] = t.value;
+});
+
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.id === "me") {
+    S.me = t.value; since = S.lastSeen[S.me] || 0; ui.open = {}; ui.composer = {};
+    save(); render(); return;
+  }
+  if (t.id === "sort") { ui.sort = t.value; render(); return; }
+  const act = t.dataset.act;
+  if (!["ok", "minutes", "difficulty"].includes(act)) return;
+  const k = S.me + ":" + t.dataset.v;
+  const o = S.oks[k] || (S.oks[k] = {});
+  if (act === "ok") o.ok = t.checked;
+  if (act === "minutes") o.minutes = t.value === "" ? undefined : Math.max(0, parseInt(t.value, 10) || 0);
+  if (act === "difficulty") o.difficulty = t.value === "" ? undefined : Number(t.value);
+  save(); render();
+});
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]");
+  if (!b) return;
+  const v = b.dataset.v;
+  const c = S.comments.find(x => String(x.id) === v);
+  switch (b.dataset.act) {
+    case "reset":
+      if (confirm("¿Volver a los datos de ejemplo? Se pierde lo que hayas hecho.")) {
+        S = seed(); since = S.lastSeen[S.me]; ui.drafts = {}; ui.open = {}; ui.composer = {};
+        save(); render();
+      }
+      return;
+    case "filter": ui.filter = v; break;
+    case "jump":
+      document.getElementById("p" + v).scrollIntoView({ behavior: "smooth" }); return;
+    case "seen":
+      S.lastSeen[S.me] = Date.now(); since = S.lastSeen[S.me]; save(); break;
+    case "compose": ui.composer[v] = true; break;
+    case "cancelcompose": ui.composer[v] = false; delete ui.drafts["new" + v]; break;
+    case "post": {
+      const text = (ui.drafts["new" + v] || "").trim();
+      if (!text) return;
+      const partEl = document.querySelector(`[data-draftpart="${v}"]`);
+      S.comments.push({ id: S.nextId++, problem: Number(v), part: partEl ? partEl.value : "",
+        author: S.me, created: Date.now(), text, state: "Pendiente", plus: [], replies: [] });
+      delete ui.drafts["new" + v]; ui.composer[v] = false; save(); break;
+    }
+    case "plus":
+      c.plus = c.plus.includes(S.me) ? c.plus.filter(x => x !== S.me) : [...c.plus, S.me];
+      save(); break;
+    case "reply": ui.open[v] = !ui.open[v]; break;
+    case "quick": setState(c, "Resuelto", ""); save(); break;
+    case "send": {
+      const text = (ui.drafts["r" + v] || "").trim();
+      if (!setState(c, b.dataset.state || c.state, text)) return;
+      delete ui.drafts["r" + v]; ui.open[v] = false; save(); break;
+    }
+  }
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
